@@ -93,13 +93,17 @@ public class JdbcUserDao implements UserDao {
 
     private Connection getConnection() {
         try {
-            Class.forName("org.sqlite.JDBC");
+            /*Class.forName("org.sqlite.JDBC");*/
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("error while loading driver", e);
         }
-        String dbURL = "jdbc:sqlite:db/users.db";
+       /*String dbURL = "jdbc:sqlite:db/users.db";*/
+         String url = "jdbc:postgresql://localhost/postgres";
+         String user = "postgres";
+         String password = "admin";
         try {
-            return DriverManager.getConnection(dbURL);
+            return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             throw new RuntimeException("error while getting connection", e);
         }
