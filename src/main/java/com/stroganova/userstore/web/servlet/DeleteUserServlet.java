@@ -17,12 +17,6 @@ public class DeleteUserServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String id = request.getPathInfo();
