@@ -12,18 +12,19 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-
+    <!--my custom styles:-->
+    <link rel="stylesheet" href="/assets/css/custom.css">
     <title>USERS</title>
 </head>
 <body class="bg-light">
 
 
-    <nav class="sticky-top" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/users">Home</a></li>
-            <li class="breadcrumb-item"><a href="/users/add">Add User</a></li>
-        </ol>
-    </nav>
+<nav class="sticky-top" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/users">Home</a></li>
+        <li class="breadcrumb-item"><a href="/users/add">Add User</a></li>
+    </ol>
+</nav>
 
 
 <div class="container mt-5 p-0">
@@ -45,23 +46,25 @@
             <td>Actions</td>
             </thead>
             <#list users as user>
+                <tbody>
                 <tr>
                     <td>${user.id}</td>
                     <td>${user.name}</td>
-                    <td>${user.salary}</td>
-                    <td >
+                    <td>${user.salary?string["0.00"]}</td>
+                    <td>
                         <div class="d-flex justify-content-center">
-                            <div class="p-1">
-                                <a class="edit" title="Edit" data-toggle="tooltip" data-original-title="Edit"
-                                   href="/users/update/${user.id}"><i class="fa fa-edit"></i></a>
-                            </div>
-                            <div class="p-1">
-                            <a class="edit" title="Delete" data-toggle="tooltip" data-original-title="Delete"
-                               href="/users/delete/${user.id}"><i class="fa fa-backspace"></i></a>
-                            </div>
+                            <form action="/users/update/${user.id}" method="get">
+                                <button class="btn bg-transparent text-primary" title="Edit" data-toggle="tooltip"
+                                        data-original-title="Edit"><i class="fa fa-edit"></i></i></button>
+                            </form>
+                            <form action="/users/delete/${user.id}" method="post">
+                                <button class="btn bg-transparent text-primary" title="Delete" data-toggle="tooltip"
+                                        data-original-title="Delete"><i class="fa fa-backspace"></i></button>
+                            </form>
                         </div>
                     </td>
                 </tr>
+                </tbody>
             </#list>
         </table>
     </div>
