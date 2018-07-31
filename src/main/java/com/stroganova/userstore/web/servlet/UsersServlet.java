@@ -1,7 +1,7 @@
 package com.stroganova.userstore.web.servlet;
 
 import com.stroganova.userstore.service.UserService;
-import com.stroganova.userstore.web.templates.PageGenerator;
+import com.stroganova.userstore.web.pages.PageGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,9 +27,10 @@ public class UsersServlet extends HttpServlet {
 
         String page = pageGenerator.getPage("users.html", parameters);
 
-        response.getWriter().write(page);
-        response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("text/html;charset=utf-8");
+        response.getWriter().write(page);
+
     }
 
     public void setUserService(UserService userService) {

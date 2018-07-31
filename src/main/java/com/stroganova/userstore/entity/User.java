@@ -1,16 +1,20 @@
 package com.stroganova.userstore.entity;
 
+import java.time.LocalDate;
+
 public class User {
     private long id;
     private String name;
     private Double salary;
+    private LocalDate dateOfBirth;
 
     public User() {
     }
 
-    public User(String name, Double salary) {
+    public User(String name, Double salary, LocalDate dateOfBirth) {
         this.name = name;
         this.salary = salary;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public long getId() {
@@ -37,6 +41,13 @@ public class User {
         this.salary = salary;
     }
 
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -44,9 +55,10 @@ public class User {
         if (!(o instanceof User)) return false;
 
         User user = (User) o;
-        /*if (id != user.id) return false;*/
+
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
-        return salary != null ? salary.equals(user.salary) : user.salary == null;
+        if (salary != null ? !salary.equals(user.salary) : user.salary != null) return false;
+        return dateOfBirth != null ? dateOfBirth.equals(user.dateOfBirth) : user.dateOfBirth == null;
     }
 
     @Override

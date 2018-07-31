@@ -24,11 +24,12 @@ public class DeleteUserServlet extends HttpServlet {
 
         userService.deleteById(userId);
 
+
         response.setContentType("text/html");
-        PrintWriter pw = response.getWriter();
+        //PrintWriter pw = response.getWriter();
 
         response.sendRedirect("/users");
 
-        pw.close();
+        //pw.close();
     }
 }

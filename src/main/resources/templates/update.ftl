@@ -12,7 +12,7 @@
     <!--my custom styles:-->
     <link rel="stylesheet" href="/assets/css/custom.css">
 
-    <title>Add User</title>
+    <title>Update User</title>
 </head>
 <body>
 
@@ -24,37 +24,44 @@
 </nav>
 
 <div class="container">
-    <div class="row mt-5">
+    <div class="row mt-0">
 
         <div class="adding-form col-md-6 offset-md-3 pb-5 pl-5 pr-5">
-            <!--div class="bg-light col-md-6 offset-md-3 pt-3 pb-5 pl-5 pr-5 rounded"-->
+        <!--div class="bg-light col-md-6 offset-md-3 pt-1 pb-5 pl-5 pr-5 rounded"-->
 
-            <h5 class="title font-weight-light">Add user here</h5>
-            <!--h1 class="font-weight-light text-center pt-3"><b>Add</b> the user here</h1-->
+            <h5 class="title font-weight-light">Change user here</h5>
+            <!--h1 class="font-weight-light text-center pt-3 pb-3"><b>Change</b> the user here</h1-->
 
-            <form action="/users/add" method="POST">
-
+            <form action="/users/update" method="POST">
+                <input type="hidden" name="id" id="id" value=${user.id}>
                 <div class="form-group">
                     <label for="name" class="font-weight-light">Name:</label>
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Enter user name"
-                           required>
+                    <input type="text" name="name" class="form-control" id="name" value="${user.name}">
+                    <small id="namez" class="form-text text-muted">Update user name</small>
                 </div>
                 <div class="form-group">
                     <label for="salary" class="font-weight-light">Salary:</label>
-                    <input type="number" step="0.01" name="salary" class="form-control" id="salary"
-                           placeholder="Enter user salary">
+                    <input type="number" step="0.01" name="salary" class="form-control"
+                           id="salary" value=${user.salary?c}>
+                    <small id="salaryz" class="form-text text-muted">Update user salary</small>
+                </div>
+                <div class="form-group">
+                    <label for="dateOfBirth" class="font-weight-light">Date of Birth:</label>
+                    <input type="date" name="dateOfBirth" class="form-control"
+                           id="dateOfBirth" value=${user.dateOfBirth}>
+                    <small id="dateOfBirthz" class="form-text text-muted">Update user birthday</small>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                <button type="submit" class="btn btn-primary btn-block">Save changes</button>
 
             </form>
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-0">
         <div class="col-md-6 offset-md-3 p-0">
-            <div class="bg-light rounded p-3 text-center">
+            <div class="status-message rounded pb-3 text-center">
                 <h4 class="font-weight-light ">
-                    <#if user??>User with name "${user.name}" and salary "${user.salary?string["0.00"]}" was added.</#if>
+                    <#if updatedUser??>User was changed to user with name "${user.name}", salary "${user.salary?string["0.00"]}" and birthday "${user.dateOfBirth}".</#if>
                 </h4>
             </div>
         </div>

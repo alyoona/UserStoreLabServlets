@@ -1,6 +1,7 @@
 package com.stroganova.userstore;
 
-import com.stroganova.userstore.dao.UserDao;
+import com.stroganova.userstore.config.ApplicationProperties;
+import com.stroganova.userstore.dao.jdbc.ConnectionManager;
 import com.stroganova.userstore.dao.jdbc.JdbcUserDao;
 import com.stroganova.userstore.service.UserService;
 import com.stroganova.userstore.web.servlet.*;
@@ -8,13 +9,20 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import java.util.Properties;
+
 public class Starter {
 
     public static void main(String[] args) throws Exception {
-        //dao
-        UserDao userDao = new JdbcUserDao();
+        //Properties
+        ApplicationProperties applicationProperties = new ApplicationProperties();
 
-        //userDao.createUsers();
+        //DB
+        ConnectionManager connectionManager = new ConnectionManager(applicationProperties.getProperties());
+
+        //dao
+        JdbcUserDao userDao = new JdbcUserDao();
+        userDao.setConnectionManager(connectionManager);
 
         //services
         UserService userService = new UserService();
@@ -52,7 +60,7 @@ public class Starter {
         server.setHandler(contextHandler);
 
         server.start();
-        server.join();
+
     }
 
 }

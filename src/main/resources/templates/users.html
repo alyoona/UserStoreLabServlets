@@ -43,6 +43,7 @@
             <td>Id</td>
             <td>Name</td>
             <td>Salary</td>
+            <td>Date of Birth</td>
             <td>Actions</td>
             </thead>
             <#list users as user>
@@ -51,6 +52,7 @@
                     <td>${user.id}</td>
                     <td>${user.name}</td>
                     <td>${user.salary?string["0.00"]}</td>
+                    <td>${user.dateOfBirth}</td>
                     <td>
                         <div class="d-flex justify-content-center">
                             <form action="/users/update/${user.id}" method="get">

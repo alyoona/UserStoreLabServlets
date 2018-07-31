@@ -10,23 +10,18 @@ import java.util.List;
 
 public class JdbcUserDao implements UserDao {
 
-    private final static String CREATE_TABLE_USERS = "CREATE TABLE users (\n" +
-            "  id SERIAL PRIMARY KEY,\n" +
-            "  name VARCHAR(100),\n" +
-            "  salary DECIMAL\n" +
-            ");";
-
-
-    private final static String GET_ALL_USERS_SQL = "SELECT id, name, salary FROM users";
-    private final static String GET_USER_BY_ID = "SELECT id, name, salary FROM users WHERE id = ?";
-    private final static String INSERT_USER = "INSERT INTO users (name, salary) VALUES (?, ?);";
-    private final static String UPDATE_USER_BY_ID = "UPDATE users SET name = ?, salary = ? WHERE id = ?;";
-    private final static String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
+    private final static String GET_ALL_USERS_SQL = "SELECT id, name, salary, dateOfBirth FROM users";
+    private final static String GET_USER_BY_ID_SQL = "SELECT id, name, salary, dateOfBirth FROM users WHERE id = ?";
+    private final static String INSERT_USER_SQL = "INSERT INTO users (name, salary, dateOfBirth) VALUES (?, ?, ?);";
+    private final static String UPDATE_USER_BY_ID_SQL = "UPDATE users SET name = ?, salary = ?, dateOfBirth = ? WHERE id = ?;";
+    private final static String DELETE_USER_BY_ID_SQL = "DELETE FROM users WHERE id = ?";
 
     private final static UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
+    private ConnectionManager connectionManager;
+
     public List<User> getAll() {
-        try (Connection connection = getConnection();
+        try (Connection connection = connectionManager.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(GET_ALL_USERS_SQL)) {
             List<User> userList = new ArrayList<>();
@@ -43,12 +38,12 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User getById(long id) {
         User user = null;
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(GET_USER_BY_ID)) {
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_USER_BY_ID_SQL)) {
 
             statement.setLong(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
+                if (resultSet.next()) {
                     user = USER_ROW_MAPPER.mapRow(resultSet);
                 }
             }
@@ -60,11 +55,12 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void add(User user) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_USER)) {
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(INSERT_USER_SQL)) {
 
             statement.setString(1, user.getName());
             statement.setDouble(2, user.getSalary());
+            statement.setDate(3, Date.valueOf(user.getDateOfBirth()));
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("error while inserting user", e);
@@ -73,8 +69,8 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void deleteById(long id) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_ID)) {
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_ID_SQL)) {
 
             statement.setLong(1, id);
             statement.executeUpdate();
@@ -85,45 +81,20 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void update(User user) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_BY_ID)) {
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_BY_ID_SQL)) {
 
             statement.setString(1, user.getName());
             statement.setDouble(2, user.getSalary());
-            statement.setLong(3, user.getId());
+            statement.setDate(3, Date.valueOf(user.getDateOfBirth()));
+            statement.setLong(4, user.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("error while updating", e);
         }
     }
 
-    public void createUsers() {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement();)
-        {
-            statement.executeUpdate(CREATE_TABLE_USERS);
-        } catch (SQLException e) {
-            throw new RuntimeException("error while creating table users, please uncomment line in the Starter.java //userDao.createUsers();", e);
-        }
-
+    public void setConnectionManager(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
     }
-
-    private Connection getConnection() {
-        try {
-            /*Class.forName("org.sqlite.JDBC");*/
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("error while loading driver", e);
-        }
-       /*String dbURL = "jdbc:sqlite:db/users.db";*/
-        String url = "jdbc:postgresql://localhost/postgres";
-        String user = "postgres";
-        String password = "admin";
-        try {
-            return DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            throw new RuntimeException("error while getting connection", e);
-        }
-    }
-
 }
