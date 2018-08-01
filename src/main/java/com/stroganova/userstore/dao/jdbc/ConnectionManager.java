@@ -13,18 +13,17 @@ public class ConnectionManager {
     private String password;
 
     public ConnectionManager(Properties properties) {
-        this.driver = properties.getProperty("jdbc.driver");
+        try {
+            Class.forName(properties.getProperty("jdbc.driver"));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("error while loading driver", e);
+        }
         this.url = properties.getProperty("jdbc.url");
         this.user = properties.getProperty("jdbc.username");
         this.password = properties.getProperty("jdbc.password");
     }
 
     public Connection getConnection() {
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("error while loading driver", e);
-        }
         try {
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {

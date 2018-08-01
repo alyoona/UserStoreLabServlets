@@ -26,7 +26,7 @@ public class UpdateUserServlet extends HttpServlet {
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("text/html;charset=utf-8");
-        response.getWriter().println(PageGenerator.instance().getPage("update.ftl", pageVariables));
+        response.getWriter().println(PageGenerator.instance().getPage("update.html", pageVariables));
 
     }
 
@@ -52,7 +52,7 @@ public class UpdateUserServlet extends HttpServlet {
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("text/html;charset=utf-8");
-        response.getWriter().println(PageGenerator.instance().getPage("update.ftl", pageVariables));
+        response.getWriter().println(PageGenerator.instance().getPage("update.html", pageVariables));
     }
 
     private User getUpdatingUser(HttpServletRequest request) {

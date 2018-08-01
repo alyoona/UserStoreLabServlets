@@ -30,7 +30,6 @@ public class PageGenerator {
     public String getPage(String filename, Map<String, Object> data) {
         Writer stream = new StringWriter();
         try {
-            cfg.setTemplateLoader(new ClassTemplateLoader(this.getClass(), "/templates"));
             //Template template = cfg.getTemplate(HTML_DIR + File.separator + filename);
             Template template = cfg.getTemplate(filename);
             template.process(data, stream);
@@ -42,5 +41,6 @@ public class PageGenerator {
 
     private PageGenerator() {
         cfg = new Configuration();
+        cfg.setTemplateLoader(new ClassTemplateLoader(this.getClass(), "/templates"));
     }
 }

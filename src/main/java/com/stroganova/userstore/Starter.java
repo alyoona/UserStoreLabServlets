@@ -44,14 +44,10 @@ public class Starter {
 
         //server config
         ServletContextHandler contextHandler = new ServletContextHandler();
-        ServletHolder servletHolderForUsers = new ServletHolder(usersServlet);
-        ServletHolder servletHolderForAdd = new ServletHolder(addUserServlet);
-        ServletHolder servletHolderForUpdate = new ServletHolder(updateUserServlet);
-        ServletHolder servletHolderForDelete = new ServletHolder(deleteUserServlet);
-        contextHandler.addServlet(servletHolderForUsers, "/users/*");
-        contextHandler.addServlet(servletHolderForAdd, "/users/add");
-        contextHandler.addServlet(servletHolderForUpdate, "/users/update/*");
-        contextHandler.addServlet(servletHolderForDelete, "/users/delete/*");
+        contextHandler.addServlet(new ServletHolder(usersServlet), "/users/*");
+        contextHandler.addServlet(new ServletHolder(addUserServlet), "/users/add");
+        contextHandler.addServlet(new ServletHolder(updateUserServlet), "/users/update/*");
+        contextHandler.addServlet(new ServletHolder(deleteUserServlet), "/users/delete/*");
         contextHandler.addServlet(new ServletHolder(new AssetsServlet()), "/assets/*");
 
 
